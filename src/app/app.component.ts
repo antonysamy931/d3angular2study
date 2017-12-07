@@ -30,7 +30,7 @@ export class AppComponent {
     ngOnInit() {
         this.initSvg();
         this.initAxis();
-        //this.drawAxis();
+        this.drawAxis();
         this.drawBars();
     }
 
@@ -43,10 +43,16 @@ export class AppComponent {
     }
 
     private initAxis() {
-        this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
-        this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-        this.x.domain(STATISTICS.map((d) => d.letter));
-        this.y.domain([0, d3Array.max(STATISTICS, (d) => d.frequency)]);
+        //this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
+        //this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
+        //this.x.domain(STATISTICS.map((d) => d.letter));
+        //this.y.domain([0, d3Array.max(STATISTICS, (d) => d.frequency)]);
+
+        this.y = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
+        this.x = d3Scale.scaleLinear().rangeRound([this.height, 0]);
+        this.y.domain(STATISTICS.map((d) => d.letter));
+        this.x.domain([0, d3Array.max(STATISTICS, (d) => d.frequency)]);
+
     }
 
     private drawAxis() {
@@ -67,11 +73,22 @@ export class AppComponent {
     }
 
     private drawBars() {
+        //this.g.selectAll(".bar")
+        //    .data(STATISTICS)
+        //    .enter().append("rect")
+        //    .attr("class", "bar")
+        //    .attr("x", (d) => this.x(d.letter))
+        //    .attr("y", (d) => this.y(d.frequency))
+        //    .attr("dy", ".35em")
+        //    .attr("width", this.x.bandwidth())
+        //    .attr("height", (d) => this.height - this.y(d.frequency));
+
         this.g.selectAll(".bar")
             .data(STATISTICS)
-            .enter().append("rect")            
-            .attr("x", (d) => this.x(d.letter))
-            .attr("y", (d) => this.y(d.frequency))
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", (d) => this.x(d.frequency))
+            .attr("y", (d) => this.y(d.letter))
             .attr("dy", ".35em")
             .attr("width", this.x.bandwidth())
             .attr("height", (d) => this.height - this.y(d.frequency));
